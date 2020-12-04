@@ -31,7 +31,8 @@ func main() {
 	cfig.DB.AutoMigrate(&models.Empleado{})
 	cfig.DB.AutoMigrate(&models.Alumno{})
 	cfig.DB.AutoMigrate(&models.Matricula{})
-	
+	cfig.DB.AutoMigrate(&models.Curso{})
+
 	//cfig.DB.Create(&models.Empleado{Name: "Juan", City: "Juliaca"})
 
 	r := mux.NewRouter()
@@ -51,7 +52,9 @@ func main() {
 	r.HandleFunc("/matricula/form", controllers.MatriculaForm).Methods("GET", "POST")
 	r.HandleFunc("/matricula/delete", controllers.MatriculaDel).Methods("GET")
 
-	
+	r.HandleFunc("/curso/index", controllers.CursoList).Methods("GET")
+	r.HandleFunc("/curso/form", controllers.CursoForm).Methods("GET", "POST")
+	r.HandleFunc("/curso/delete", controllers.CursoDel).Methods("GET")
 
 	//http.ListenAndServe(":80", r)
 	port := os.Getenv("PORT")
@@ -64,8 +67,8 @@ func main() {
 }
 
 func connectDBmysql() (c *gorm.DB, err error) {
-	dsn := "docker:docker@tcp(mysql-db:3306)/test_db?charset=utf8mb4&parseTime=True&loc=Local"
-	//dsn := "docker:docker@tcp(localhost:3306)/test_db?charset=utf8mb4&parseTime=True&loc=Local"
+	//dsn := "docker:docker@tcp(mysql-db:3306)/test_db?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:@tcp(localhost:3306)/test_db?charset=utf8mb4&parseTime=True&loc=Local"
 	conn, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	return conn, err
